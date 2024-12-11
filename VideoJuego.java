@@ -721,6 +721,31 @@ class PanelControl extends JPanel {
             }
         });
     }
+     private void guardarResultados(String ganador) {
+        
+        try (PrintWriter pw = new PrintWriter(new FileWriter("ganador.txt"))) {
+            pw.println("Ganador: " + ganador);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        
+        Ejercito ejercitoGanador = juego.getEjercito1().getReino().equals(ganador) ? juego.getEjercito1() : juego.getEjercito2();
+        int cantidad = ejercitoGanador.getSoldados().size();
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream("datos.bin"))) {
+            dos.writeInt(cantidad);
+        } catch (IOException ex) {
+            ex.getMessage();
+        }
+
+       
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("juego.obj"))) {
+            oos.writeObject(juego);
+        } catch (IOException ex) {
+            ex.getMessage();
+        }
+    }
+    
 
     private void moverSoldado() {
         try {
